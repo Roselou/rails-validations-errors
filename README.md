@@ -59,6 +59,8 @@ For the purposes of this workshop there is a Rails app, `airplane_app` inside th
 
 The application was generated with: `rails new airplane_app -T -B -d postgresql` in order to prevent Rails from automatically creating tests (`-T`), prevent it from automatically bundling (`-B`), and set the database to postgres (`-d postgresql`).
 
+Open this app, get it running, and write down at least 3 observations about the code base.
+
 >Be sure to `bundle`, `rails db:create db:migrate db:seed`, and have postgres running before launching the application.
 
 ## Model Validations
@@ -85,7 +87,7 @@ you'll get an error causing a `ROLLBACK`. Try, `Airplane.create(name: "747")`, w
 
 What if you call `Airplane.create!(name: "747")`?
 
-Alternatively, we can check any piece of data we are about to save with the `.valid?` method. So, instead if immediately calling`.create`. In that case, we can create a `.new` airplane instance in memory (without saving it to the database), then asking if it's `.valid?` before calling `.save`.
+Alternatively, we can check any piece of data we are about to save with the `.valid?` method. So, instead of immediately calling`.create`. In that case, we can create a `.new` airplane instance in local memory (without saving it to the database), then asking if it's `.valid?` before calling `.save`.
 
 ```bash
 > airplane = Airplane.new(name: "747")
@@ -127,10 +129,10 @@ Because we're trying to display an error message we get back from Active Record 
 flash[:error] = airplane.errors.full_messages
 ```
 
-Add the above line into `airplane#create` action, if the airplane isn't saved correctly and before the `:new` view is rendered again.
+Add the above line into the `airplane#create` action. Make that line execute if the airplane isn't saved correctly and make sure it happens before the `:new` view is rendered again.
 
 <details>
-  <summary><strong>Where should this piece of code go?</strong></summary>
+  <summary><strong>In which file should that line of code go?</strong></summary>
   <br>
   <p> **app/controllers/airplanes_controller.rb** </p>
 </details>
@@ -152,7 +154,7 @@ Add the above line into `airplane#create` action, if the airplane isn't saved co
 Just one last step! We've sent `flash` to the view, but we haven't rendered it yet. Let's do that in our `application.html.erb` layout, so we can render flash messages in *every* view:
 
 <details>
-  <summary><strong>Where should this piece of code go?</strong></summary>
+  <summary><strong>In which file should the following piece of code go?</strong></summary>
   <br>
   <p> **app/views/layouts/application.html.erb** </p>
 </details>
@@ -169,13 +171,19 @@ Just one last step! We've sent `flash` to the view, but we haven't rendered it y
 
 ## More Challenges
 
+* After you've gotten a flash message to display an error from the `name` of your airplane, create a validation that we haven't used yet for the `description` attribute in your airplane model. Then make sure you can get a flash message to display when somebody generates bad input.
+* Create a flash message that communicates to the user that they *have* successfully created a new entry in the db.
+* Add a passenger model with at least 5 attributes and at least 3 novel validations.
+* Add a controller and controller methods that will properly allow you to display any issues with creating an instance of the passenger model.
+
+## Closing
+
 We've just covered how to:
 
 * Implement validations
 * Query Active Record for validation errors
 * Handle errors appropriately
 * Display errors to the user
-* Set breakpoints in Rails
 
 ## Resources
 
